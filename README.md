@@ -1,2 +1,5 @@
 # rocm-fooocus
-Containerized fooocus using rocm 
+
+```
+make fooocus
+```

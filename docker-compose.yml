@@ -1,0 +1,42 @@
+version: '3'
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+  
+  fooocus-base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: fooocus-base
+    environment:
+      TZ: "America/Phoenix"
+
+  fooocus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: fooocus-ui 
+    entrypoint: ["/bin/sh", "-c"]
+    environment:
+      HSA_OVERRIDE_GFX_VERSION: "11.0.0"
+      # HCC_AMDGPU_TARGET: "gfx1103"
+    command: >
+      "rocm-smi; rocminfo;
+      python3 entry_with_update.py --listen"
+    ports:
+      - "7865:7865"
+    devices:
+      - "/dev/kfd:/dev/kfd"
+      - "/dev/dri:/dev/dri"
+    ipc: host
+    network_mode: host
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    privileged: true
+    volumes:
+      ./fooocus-models:/app/models:z
