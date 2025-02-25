@@ -9,9 +9,9 @@ build_cache:
 	                     fooocus-base
 
 fooocus: build_cache 
-	podman pod rm -f pod_fooocus-docker
-	podman-compose --verbose up fooocus-ui 
+	podman pod rm -f pod_fooocus
+	podman-compose --verbose up fooocus 
 
 clean:
 	# rm -rf build_cache
-	podman pod rm -f pod_fooocus-ui-docker
+	podman pod rm -f pod_rocm-fooocus 
